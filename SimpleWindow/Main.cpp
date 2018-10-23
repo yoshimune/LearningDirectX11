@@ -3,6 +3,12 @@
 #endif 
 
 #include <Windows.h>
+#include <new>
+
+struct StateInfo
+{
+	int state = 100;
+};
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -21,6 +27,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
 	//Create the window.
 
+	// #include <new> ‚ª•K—v
+	StateInfo *pState = new (std::nothrow) StateInfo;
+
 	HWND hwnd = CreateWindowEx(
 		0,								// Optional window styles.
 		CLASS_NAME,						// Window class
@@ -33,7 +42,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 		NULL,		// Parent Window
 		NULL,		// Menu
 		hInstance,	// Instance handle
-		NULL		// Additional application data
+		pState		// Additional application data
 	);
 
 	if (hwnd == NULL)
@@ -55,10 +64,38 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	return 0;
 }
 
+inline StateInfo* GetAppState(HWND hwnd)
+{
+	LONG_PTR ptr = GetWindowLongPtr(hwnd, GWLP_USERDATA);
+	StateInfo *pState = reinterpret_cast<StateInfo*>(ptr);
+	return pState;
+}
+
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	StateInfo *pState;
+	if (uMsg == WM_CREATE)
+	{
+		CREATESTRUCT *pCreate = reinterpret_cast<CREATESTRUCT*>(lParam);
+		pState = reinterpret_cast<StateInfo*>(pCreate->lpCreateParams);
+		SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)pState);
+	}
+	else
+	{
+		pState = GetAppState(hwnd);
+	}
+
 	switch (uMsg)
 	{
+	case WM_CLOSE:
+		if (MessageBox(hwnd, L"Really quit?", L"My application", MB_OKCANCEL) == IDOK)
+		{
+			DestroyWindow(hwnd);
+		}
+
+		// Else :User canceled. Do nothing;
+		return 0;
+			
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
