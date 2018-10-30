@@ -231,7 +231,7 @@ void Game::CreateDevice()
 #endif // !NDEBUG
 
 	// パイプラインの設定を行う
-	ConfigurePipeline();
+	CreateConstantResources();
 }
 
 // リソースを作成する
@@ -334,10 +334,12 @@ void Game::CreateResources()
 
 	CD3D11_DEPTH_STENCIL_VIEW_DESC depth_stencil_view_desc(D3D11_DSV_DIMENSION_TEXTURE2D);
 	DX::ThrowIfFailed(d3d_device_->CreateDepthStencilView(depth_stencil.Get(), &depth_stencil_view_desc, d3d_depth_stencil_view_.ReleaseAndGetAddressOf()));
+
+
 }
 
-// パイプライン設定を行う
-void Game::ConfigurePipeline()
+// ゲーム中固定のリソースを作成する
+void Game::CreateConstantResources()
 {
 	// Shader =====================================================================
 	// バイナリファイルからシェーダーを読み込みます

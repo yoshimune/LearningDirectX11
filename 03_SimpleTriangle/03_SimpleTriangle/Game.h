@@ -83,8 +83,8 @@ private:
 	// リソースを作成する
 	void CreateResources();
 
-	// パイプラインの設定を行う
-	void ConfigurePipeline();
+	// ゲーム中固定のリソースを作成する
+	void CreateConstantResources();
 
 	// デバイスが削除された際にデバイスリソースの再設定を行う
 	void OnDeviceLost();
