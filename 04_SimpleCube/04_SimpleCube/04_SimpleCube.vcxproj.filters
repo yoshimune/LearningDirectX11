@@ -35,4 +35,9 @@
     <None Include="pixelShader.cso" />
     <None Include="vertexShader.cso" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="sample.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

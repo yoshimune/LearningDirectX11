@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "DirectXTex.h"
 #include <DirectXColors.h>
 #include <fstream>
 
@@ -474,6 +475,9 @@ void Game::CreateConstantResources()
 			d3d_device_->CreateBuffer(&bd, nullptr, d3d_cbuffer_.GetAddressOf())
 		);
 	}
+
+	// テクスチャ =============================================================
+	
 
 	// ラスタライザステート ===================================================
 	CD3D11_DEFAULT default_state;
